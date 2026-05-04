@@ -26,7 +26,7 @@ Swagger UI: `http://localhost:8080/swagger-ui.html`
 | Method | Path | Description |
 |--------|------|-------------|
 | POST | `/api/employees` | Create employee |
-| GET | `/api/employees` | List all employees |
+| GET | `/api/employees` | List employees (paginated) |
 | GET | `/api/employees/{id}` | Get by ID |
 | GET | `/api/employees/salary-range?min=&max=` | Filter by salary range |
 | PUT | `/api/employees/{id}` | Full update |
@@ -41,6 +41,37 @@ Swagger UI: `http://localhost:8080/swagger-ui.html`
 | POST | `/api/v1/employees/import` | Import employees from `.xlsx` |
 | GET | `/api/v1/employees/export/excel` | Export employees to `.xlsx` |
 | GET | `/api/v1/employees/export/pdf` | Export employees to `.pdf` |
+
+#### Pagination Query Params (`GET /api/employees`)
+
+| Param | Type | Default | Description |
+|-------|------|---------|-------------|
+| `page` | int | `0` | Zero-based page number |
+| `size` | int | `10` | Items per page |
+| `sort` | string | `createdAt,desc` | Sort field and direction |
+
+**Paginated response shape:**
+```json
+{
+  "success": true,
+  "data": {
+    "content": [...],
+    "totalElements": 45,
+    "totalPages": 5,
+    "number": 0,
+    "size": 10
+  }
+}
+```
+
+**Examples:**
+```
+GET /api/employees                         # page 0, 10 items, createdAt DESC
+GET /api/employees?page=2&size=5           # page 3, 5 items
+GET /api/employees?sort=firstName,asc      # sorted by first name
+```
+
+---
 
 #### Export Query Params
 
@@ -104,3 +135,4 @@ Excel columns: ID, First Name, Last Name, Email, Department, Salary, Date of Joi
 | 0.0.2 | Bulk Excel import (`POST /api/v1/employees/import`) |
 | 0.0.3 | Excel export with optional filters (`GET /api/v1/employees/export/excel`) |
 | 0.0.4 | PDF report export with optional filters (`GET /api/v1/employees/export/pdf`) |
+| 0.0.5 | Pagination on `GET /api/employees` — defaults: page 0, size 10, sorted by `createdAt` DESC |
