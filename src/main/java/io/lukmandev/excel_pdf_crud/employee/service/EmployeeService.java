@@ -3,6 +3,8 @@ package io.lukmandev.excel_pdf_crud.employee.service;
 import io.lukmandev.excel_pdf_crud.employee.dto.request.EmployeePartialUpdateDto;
 import io.lukmandev.excel_pdf_crud.employee.dto.request.EmployeeRequestDto;
 import io.lukmandev.excel_pdf_crud.employee.dto.response.EmployeeResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -10,7 +12,7 @@ public interface EmployeeService {
 
     EmployeeResponseDto createEmployee(EmployeeRequestDto dto);
 
-    List<EmployeeResponseDto> findAll();
+    Page<EmployeeResponseDto> findAll(Pageable pageable);
 
     EmployeeResponseDto findById(Long id);
 

@@ -35,6 +35,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
@@ -76,8 +78,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<EmployeeResponseDto> findAll() {
-        return employeeMapper.toDtoList(employeeRespository.findAll());
+    public Page<EmployeeResponseDto> findAll(Pageable pageable) {
+        return employeeRespository.findAll(pageable).map(employeeMapper::toDto);
     }
 
     @Override

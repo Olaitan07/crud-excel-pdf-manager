@@ -15,6 +15,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -43,11 +47,13 @@ public class EmployeeController {
 
     // ── READ ─────────────────────────────────────────────────────────────────
 
-    @Operation(summary = "Get all employees")
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "List of all employees")
+    @Operation(summary = "Get all employees (paginated)")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Paginated list of employees")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<EmployeeResponseDto>>> findAll() {
-        return ResponseEntity.ok(ApiResponse.ok(employeeService.findAll()));
+    public ResponseEntity<ApiResponse<Page<EmployeeResponseDto>>> findAll(
+            @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
+            Pageable pageable) {
+        return ResponseEntity.ok(ApiResponse.ok(employeeService.findAll(pageable)));
     }
 
     @Operation(summary = "Get employee by ID")
